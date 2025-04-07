@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,19 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Add custom theme colors
+				navy: {
+					50: '#f0f4f8',
+					100: '#d9e2ec',
+					200: '#bcccdc',
+					300: '#9fb3c8',
+					400: '#829ab1',
+					500: '#627d98',
+					600: '#486581',
+					700: '#334e68',
+					800: '#243b53',
+					900: '#102a43',
 				}
 			},
 			borderRadius: {
@@ -84,11 +98,26 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'fade-in': {
+					'0%': { opacity: '0' },
+					'100%': { opacity: '1' }
+				},
+				'fade-out': {
+					'0%': { opacity: '1' },
+					'100%': { opacity: '0' }
+				},
+				'pulse-gentle': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.8' }
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.5s ease-out',
+				'fade-out': 'fade-out 0.5s ease-out',
+				'pulse-gentle': 'pulse-gentle 2s ease-in-out infinite'
 			}
 		}
 	},
