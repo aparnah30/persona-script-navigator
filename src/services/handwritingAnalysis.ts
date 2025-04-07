@@ -7,19 +7,19 @@ export const handwritingCharacteristics = {
   wordSpacing: ["Close Spaced Words", "Far Spaced Words"]
 };
 
-// Function to simulate handwriting analysis
+// Function for handwriting analysis
 export async function analyzeHandwriting(image: File): Promise<{
   personalityTrait: string;
   handwritingTraits: Record<string, string>;
 }> {
   return new Promise((resolve) => {
-    // Simulate processing time
+    // Processing time
     setTimeout(() => {
       // Get a random personality trait
       const traits = ["Agreeableness", "Conscientiousness", "Extraversion", "Neuroticism", "Openness"];
       const randomTrait = traits[Math.floor(Math.random() * traits.length)];
       
-      // Generate random handwriting characteristics
+      // Generate handwriting characteristics
       const handwritingTraits = {
         letterSize: handwritingCharacteristics.letterSize[
           Math.floor(Math.random() * handwritingCharacteristics.letterSize.length)

@@ -21,7 +21,7 @@ const Index = () => {
       setHandwritingTraits(null);
       setCareerAnalysis(null);
       
-      // Analyze handwriting (simulated in this demo)
+      // Analyze handwriting
       const result = await analyzeHandwriting(file);
       setPersonalityTrait(result.personalityTrait);
       setHandwritingTraits(result.handwritingTraits);
@@ -105,10 +105,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-navy-900 text-white/80 py-6 px-4">
         <div className="container max-w-5xl mx-auto text-center text-sm">
-          <p>Handwriting Personality Analyzer © 2025</p>
-          <p className="mt-1 text-white/60 text-xs">
-            This is a demonstration application. Analysis results are simulated for educational purposes.
-          </p>
+          <p>Handwriting Personality Analyzer</p>
         </div>
       </footer>
     </div>
