@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import FileUploader from "@/components/FileUploader";
 import PersonalityResult from "@/components/PersonalityResult";
-import { analyzeHandwriting, generateCareerAnalysis } from "@/services/handwritingAnalysis";
+import { analyzeHandwriting } from "@/services/handwritingAnalysis";
 import { Brain, Loader2, PenTool } from "lucide-react";
 
 const Index = () => {
@@ -12,9 +12,11 @@ const Index = () => {
   const [personalityTrait, setPersonalityTrait] = useState<string | null>(null);
   const [handwritingTraits, setHandwritingTraits] = useState<Record<string, string> | null>(null);
   const [careerAnalysis, setCareerAnalysis] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleFileSelected = async (file: File) => {
     setAnalyzing(true);
+    setError(null);
     try {
       // Reset previous results
       setPersonalityTrait(null);
@@ -26,11 +28,26 @@ const Index = () => {
       setPersonalityTrait(result.personalityTrait);
       setHandwritingTraits(result.handwritingTraits);
       
-      // Generate career analysis
-      const analysis = generateCareerAnalysis(result.personalityTrait, result.handwritingTraits);
-      setCareerAnalysis(analysis);
+      // Get career analysis from the API response
+      const response = await fetch('http://localhost:5000/analyze', {
+        method: 'POST',
+        body: (() => {
+          const formData = new FormData();
+          formData.append('image', file);
+          return formData;
+        })(),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to get career analysis from API');
+      }
+      
+      const data = await response.json();
+      setCareerAnalysis(data.careerAnalysis);
+      
     } catch (error) {
       console.error("Error analyzing handwriting:", error);
+      setError("Failed to analyze handwriting. Please try again or check if the API server is running.");
     } finally {
       setAnalyzing(false);
     }
@@ -81,6 +98,13 @@ const Index = () => {
               <FileUploader onFileSelected={handleFileSelected} />
             </CardContent>
           </Card>
+
+          {/* Error message */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative" role="alert">
+              <span className="block sm:inline">{error}</span>
+            </div>
+          )}
 
           {/* Analysis loader */}
           {analyzing && (

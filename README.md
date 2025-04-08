@@ -1,73 +1,57 @@
-# Welcome to your Lovable project
 
-## Project info
+# Handwriting Personality Analyzer
 
-**URL**: https://lovable.dev/projects/9a34902e-c22c-4148-b491-bdd2abd0cb2d
+This application analyzes handwriting samples to predict personality traits and provide career guidance.
 
-## How can I edit this code?
+## Project Structure
+- `/src`: React frontend code
+- `/api`: Python backend API
 
-There are several ways of editing your application.
+## Setup Instructions
 
-**Use Lovable**
+### 1. Frontend Setup
+```bash
+# Install dependencies
+npm install
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/9a34902e-c22c-4148-b491-bdd2abd0cb2d) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### 2. Backend Setup
+```bash
+# Navigate to API directory
+cd api
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+# Create a virtual environment
+python -m venv venv
 
-**Use GitHub Codespaces**
+# Activate the virtual environment
+# On Windows:
+venv\Scripts\activate
+# On macOS/Linux:
+source venv/bin/activate
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Install dependencies
+pip install -r requirements.txt
 
-## What technologies are used for this project?
+# Make sure you have your model file
+# Place personality_classifier_colab.pth in the api directory
 
-This project is built with:
+# Run the Flask API server
+python app.py
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Using the Application
+1. Start both the frontend and backend servers
+2. Open your browser to the frontend URL (usually http://localhost:3000)
+3. Upload a handwriting image
+4. View your personality analysis and career recommendations
 
-## How can I deploy this project?
+## System Requirements
+- Python 3.8+ with pip
+- Node.js and npm
+- PyTorch and other Python dependencies (see requirements.txt)
 
-Simply open [Lovable](https://lovable.dev/projects/9a34902e-c22c-4148-b491-bdd2abd0cb2d) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes it is!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## Note on Model File
+You need to have the PyTorch model file `personality_classifier_colab.pth` in the `/api` directory. This file contains the trained neural network for personality prediction.
