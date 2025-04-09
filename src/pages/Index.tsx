@@ -132,7 +132,7 @@ const Index = () => {
                   <div className="rounded-full bg-primary/10 p-4 self-center">
                     <Upload className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="font-medium text-center">Upload</h3>
+                  <h3 className="font-medium text-center">Upload Image</h3>
                   <p className="text-sm font-normal text-center">Submit an image of your handwriting</p>
                 </div>
                 
