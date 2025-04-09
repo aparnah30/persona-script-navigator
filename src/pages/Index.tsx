@@ -15,20 +15,39 @@ const Index = () => {
   const [handwritingTraits, setHandwritingTraits] = useState<Record<string, string> | null>(null);
   const [careerAnalysis, setCareerAnalysis] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [activeView, setActiveView] = useState<'upload' | 'analyze' | 'discover' | null>('upload');
+  const [activeView, setActiveView] = useState<'upload' | 'analyze' | 'discover'>('upload');
+  const [uploadedFile, setUploadedFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileSelected = async (file: File) => {
+  const handleFileSelected = (file: File) => {
+    setUploadedFile(file);
+    setError(null);
+    // Reset previous results
+    setPersonalityTrait(null);
+    setHandwritingTraits(null);
+    setCareerAnalysis(null);
+    toast({
+      title: "Image uploaded",
+      description: "Click 'Analyze' to start handwriting analysis"
+    });
+  };
+
+  const handleAnalyze = async () => {
+    if (!uploadedFile) {
+      toast({
+        title: "No image",
+        description: "Please upload a handwriting sample first.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setAnalyzing(true);
     setError(null);
+    
     try {
-      // Reset previous results
-      setPersonalityTrait(null);
-      setHandwritingTraits(null);
-      setCareerAnalysis(null);
-      
       // Analyze handwriting
-      const result = await analyzeHandwriting(file);
+      const result = await analyzeHandwriting(uploadedFile);
       setPersonalityTrait(result.personalityTrait);
       setHandwritingTraits(result.handwritingTraits);
       
@@ -37,7 +56,7 @@ const Index = () => {
         method: 'POST',
         body: (() => {
           const formData = new FormData();
-          formData.append('image', file);
+          formData.append('image', uploadedFile);
           return formData;
         })(),
       });
@@ -66,22 +85,14 @@ const Index = () => {
   };
 
   const handleAnalyzeClick = () => {
-    if (!personalityTrait || !handwritingTraits) {
-      toast({
-        title: "No analysis available",
-        description: "Please upload a handwriting sample first.",
-        variant: "destructive"
-      });
-      return;
-    }
-    setActiveView('analyze');
+    handleAnalyze();
   };
 
   const handleDiscoverClick = () => {
     if (!careerAnalysis) {
       toast({
         title: "No career analysis available",
-        description: "Please upload a handwriting sample first.",
+        description: "Please analyze a handwriting sample first.",
         variant: "destructive"
       });
       return;
@@ -117,21 +128,19 @@ const Index = () => {
                 traits and receive personalized career guidance based on your unique characteristics.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-                <Button 
-                  onClick={handleUploadClick}
-                  variant={activeView === 'upload' ? 'default' : 'outline'} 
-                  className="flex flex-col h-auto py-4 gap-2"
-                >
-                  <Upload className="w-6 h-6" />
-                  <h3 className="font-medium">Upload</h3>
-                  <p className="text-sm font-normal">Submit an image of your handwriting</p>
-                </Button>
+                <div className={`flex flex-col h-auto py-4 gap-2 ${activeView === 'upload' ? 'border-2 border-primary rounded-md p-3' : ''}`}>
+                  <div className="rounded-full bg-primary/10 p-4 self-center">
+                    <Upload className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="font-medium text-center">Upload</h3>
+                  <p className="text-sm font-normal text-center">Submit an image of your handwriting</p>
+                </div>
                 
                 <Button 
                   onClick={handleAnalyzeClick}
                   variant={activeView === 'analyze' ? 'default' : 'outline'} 
                   className="flex flex-col h-auto py-4 gap-2"
-                  disabled={!personalityTrait}
+                  disabled={!uploadedFile || analyzing}
                 >
                   <Search className="w-6 h-6" />
                   <h3 className="font-medium">Analyze</h3>
@@ -146,27 +155,25 @@ const Index = () => {
                 >
                   <Lightbulb className="w-6 h-6" />
                   <h3 className="font-medium">Discover</h3>
-                  <p className="text-sm font-normal">Receive ML-powered career insights</p>
+                  <p className="text-sm font-normal">Get LLM-powered career insights</p>
                 </Button>
               </div>
               <Separator className="my-6" />
               
-              {activeView === 'upload' && (
-                <>
-                  <input
-                    type="file"
-                    className="hidden"
-                    accept="image/jpeg,image/png"
-                    ref={fileInputRef}
-                    onChange={(e) => {
-                      if (e.target.files && e.target.files[0]) {
-                        handleFileSelected(e.target.files[0]);
-                      }
-                    }}
-                  />
-                  <FileUploader onFileSelected={handleFileSelected} />
-                </>
-              )}
+              <div className={activeView === 'upload' ? 'block' : 'hidden'}>
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/jpeg,image/png"
+                  ref={fileInputRef}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      handleFileSelected(e.target.files[0]);
+                    }
+                  }}
+                />
+                <FileUploader onFileSelected={handleFileSelected} />
+              </div>
             </CardContent>
           </Card>
 
@@ -193,6 +200,7 @@ const Index = () => {
                 personalityTrait={personalityTrait}
                 handwritingTraits={handwritingTraits}
                 careerAnalysis={careerAnalysis}
+                activeView={activeView}
               />
             </div>
           )}
