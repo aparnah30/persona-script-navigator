@@ -1,11 +1,13 @@
 
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button"; 
 import FileUploader from "@/components/FileUploader";
 import PersonalityResult from "@/components/PersonalityResult";
-import { analyzeHandwriting } from "@/services/handwritingAnalysis";
-import { Brain, Loader2, PenTool } from "lucide-react";
+import { analyzeHandwriting, generateCareerAnalysis } from "@/services/handwritingAnalysis";
+import { Brain, Loader2, PenTool, Upload, Search, Lightbulb } from "lucide-react";
+import { toast } from "@/components/ui/use-toast";
 
 const Index = () => {
   const [analyzing, setAnalyzing] = useState(false);
@@ -13,6 +15,8 @@ const Index = () => {
   const [handwritingTraits, setHandwritingTraits] = useState<Record<string, string> | null>(null);
   const [careerAnalysis, setCareerAnalysis] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [activeView, setActiveView] = useState<'upload' | 'analyze' | 'discover' | null>('upload');
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileSelected = async (file: File) => {
     setAnalyzing(true);
@@ -44,6 +48,7 @@ const Index = () => {
       
       const data = await response.json();
       setCareerAnalysis(data.careerAnalysis);
+      setActiveView('analyze');
       
     } catch (error) {
       console.error("Error analyzing handwriting:", error);
@@ -51,6 +56,37 @@ const Index = () => {
     } finally {
       setAnalyzing(false);
     }
+  };
+
+  const handleUploadClick = () => {
+    setActiveView('upload');
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleAnalyzeClick = () => {
+    if (!personalityTrait || !handwritingTraits) {
+      toast({
+        title: "No analysis available",
+        description: "Please upload a handwriting sample first.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setActiveView('analyze');
+  };
+
+  const handleDiscoverClick = () => {
+    if (!careerAnalysis) {
+      toast({
+        title: "No career analysis available",
+        description: "Please upload a handwriting sample first.",
+        variant: "destructive"
+      });
+      return;
+    }
+    setActiveView('discover');
   };
 
   return (
@@ -81,21 +117,56 @@ const Index = () => {
                 traits and receive personalized career guidance based on your unique characteristics.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 my-6">
-                <div className="bg-secondary/50 p-4 rounded-lg text-center">
-                  <h3 className="font-medium mb-2">Upload</h3>
-                  <p className="text-sm">Submit an image of your handwriting</p>
-                </div>
-                <div className="bg-secondary/50 p-4 rounded-lg text-center">
-                  <h3 className="font-medium mb-2">Analyze</h3>
-                  <p className="text-sm">Our system examines your writing style</p>
-                </div>
-                <div className="bg-secondary/50 p-4 rounded-lg text-center">
-                  <h3 className="font-medium mb-2">Discover</h3>
-                  <p className="text-sm">Receive personalized career insights</p>
-                </div>
+                <Button 
+                  onClick={handleUploadClick}
+                  variant={activeView === 'upload' ? 'default' : 'outline'} 
+                  className="flex flex-col h-auto py-4 gap-2"
+                >
+                  <Upload className="w-6 h-6" />
+                  <h3 className="font-medium">Upload</h3>
+                  <p className="text-sm font-normal">Submit an image of your handwriting</p>
+                </Button>
+                
+                <Button 
+                  onClick={handleAnalyzeClick}
+                  variant={activeView === 'analyze' ? 'default' : 'outline'} 
+                  className="flex flex-col h-auto py-4 gap-2"
+                  disabled={!personalityTrait}
+                >
+                  <Search className="w-6 h-6" />
+                  <h3 className="font-medium">Analyze</h3>
+                  <p className="text-sm font-normal">Our system examines your writing style</p>
+                </Button>
+                
+                <Button 
+                  onClick={handleDiscoverClick}
+                  variant={activeView === 'discover' ? 'default' : 'outline'} 
+                  className="flex flex-col h-auto py-4 gap-2"
+                  disabled={!careerAnalysis}
+                >
+                  <Lightbulb className="w-6 h-6" />
+                  <h3 className="font-medium">Discover</h3>
+                  <p className="text-sm font-normal">Receive ML-powered career insights</p>
+                </Button>
               </div>
               <Separator className="my-6" />
-              <FileUploader onFileSelected={handleFileSelected} />
+              
+              {activeView === 'upload' && (
+                <>
+                  <input
+                    type="file"
+                    className="hidden"
+                    accept="image/jpeg,image/png"
+                    ref={fileInputRef}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files[0]) {
+                        handleFileSelected(e.target.files[0]);
+                      }
+                    }}
+                  />
+                  <FileUploader onFileSelected={handleFileSelected} />
+                </>
+              )}
             </CardContent>
           </Card>
 
@@ -117,11 +188,13 @@ const Index = () => {
 
           {/* Results section */}
           {personalityTrait && handwritingTraits && careerAnalysis && (
-            <PersonalityResult
-              personalityTrait={personalityTrait}
-              handwritingTraits={handwritingTraits}
-              careerAnalysis={careerAnalysis}
-            />
+            <div className={activeView !== 'upload' ? 'block' : 'hidden'}>
+              <PersonalityResult
+                personalityTrait={personalityTrait}
+                handwritingTraits={handwritingTraits}
+                careerAnalysis={careerAnalysis}
+              />
+            </div>
           )}
         </div>
       </main>

@@ -1,3 +1,4 @@
+
 export const handwritingCharacteristics = {
   letterSize: ["Small Letters", "Average Letters", "Large Letters"],
   letterSlant: ["Left Slant", "Vertical Slant", "Right Slant"],
@@ -65,7 +66,9 @@ export function generateCareerAnalysis(
     return `Career analysis for ${personalityTrait} personality type with the following handwriting traits: 
     ${Object.entries(handwritingTraits).map(([key, value]) => `${key}: ${value}`).join(', ')}. 
     
-    API integration for detailed career analysis is pending. The full Mistral AI analysis will appear here once connected.`;
+    Powered by advanced Large Language Model (LLM) analysis, this AI-driven career recommendation integrates your handwriting characteristics with modern personality research to provide personalized insights.
+    
+    API integration for detailed LLM-based career analysis is pending. The full Mistral AI analysis will appear here once connected.`;
   } catch (error) {
     console.error("Error generating career analysis:", error);
     return "Unable to generate career analysis at this time.";
