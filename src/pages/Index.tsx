@@ -103,14 +103,18 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       {/* Header */}
       <header className="w-full bg-gradient-to-r from-navy-800 to-navy-900 text-white py-6 px-4">
-        <div className="container max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="flex items-center mb-4 md:mb-0">
-            <Brain className="w-8 h-8 mr-3" />
-            <h1 className="text-2xl md:text-3xl font-bold">Handwriting Based Personality Analyzer and Career Counselor</h1>
-          </div>
-          <div className="flex items-center text-sm opacity-80">
-            <PenTool className="w-4 h-4 mr-2" />
-            <span>Personality Insights Through Script Analysis</span>
+        <div className="container mx-auto max-w-full px-4">
+          <div className="flex flex-col lg:flex-row justify-between items-center">
+            <div className="flex items-center mb-4 lg:mb-0 text-center lg:text-left">
+              <Brain className="w-8 h-8 mr-3 flex-shrink-0" />
+              <h1 className="text-xl sm:text-2xl md:text-3xl font-bold whitespace-normal sm:whitespace-nowrap">
+                Handwriting Based Personality Analyzer and Career Counselor
+              </h1>
+            </div>
+            <div className="flex items-center text-sm opacity-80 mt-2 lg:mt-0">
+              <PenTool className="w-4 h-4 mr-2 flex-shrink-0" />
+              <span>Personality Insights Through Script Analysis</span>
+            </div>
           </div>
         </div>
       </header>
@@ -208,7 +212,7 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="bg-navy-900 text-white/80 py-6 px-4">
-        <div className="container max-w-5xl mx-auto text-center text-sm">
+        <div className="container mx-auto max-w-full text-center text-sm">
           <p>Handwriting Based Personality Analyzer and Career Counselor</p>
         </div>
       </footer>
