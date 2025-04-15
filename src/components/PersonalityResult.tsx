@@ -24,6 +24,15 @@ const PersonalityResult: React.FC<PersonalityResultProps> = ({
     return null;
   }
 
+  // Clean markdown formatting from LLM output
+  const cleanMarkdownFormatting = (text: string) => {
+    return text
+      .replace(/\*\*/g, '') // Remove bold markdown
+      .replace(/##/g, '') // Remove heading markdown
+      .replace(/\*/g, '') // Remove italics markdown
+      .replace(/^-\s/gm, '• '); // Replace list dashes with bullets
+  };
+
   return (
     <div className="w-full space-y-6 mt-8 result-appear">
       {/* Main personality card - shown in analyze view */}
@@ -47,19 +56,7 @@ const PersonalityResult: React.FC<PersonalityResultProps> = ({
               ))}
             </div>
             
-            <h3 className="text-lg font-medium mb-3">Potential Careers</h3>
-            <div className="flex flex-wrap gap-2 mb-6">
-              {personality.careers.map((career) => (
-                <span
-                  key={career}
-                  className="px-3 py-1 bg-primary/10 text-primary-foreground rounded-full text-sm"
-                >
-                  {career}
-                </span>
-              ))}
-            </div>
-            
-            <h3 className="text-lg font-medium mb-2">Optimal Work Environment</h3>
+            <h3 className="text-lg font-medium mb-3">Optimal Work Environment</h3>
             <p>{personality.workStyle}</p>
           </CardContent>
         </Card>
@@ -103,7 +100,7 @@ const PersonalityResult: React.FC<PersonalityResultProps> = ({
               <p className="mb-4 text-sm text-muted-foreground">
                 Powered by advanced Mistral AI Large Language Model analysis
               </p>
-              <div className="whitespace-pre-line">{careerAnalysis}</div>
+              <div className="whitespace-pre-line">{cleanMarkdownFormatting(careerAnalysis)}</div>
             </div>
           </CardContent>
         </Card>
