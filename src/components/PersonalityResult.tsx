@@ -24,14 +24,6 @@ const PersonalityResult: React.FC<PersonalityResultProps> = ({
     return null;
   }
 
-  // Function to clean markdown formatting from LLM output
-  const cleanLlmOutput = (text: string) => {
-    return text
-      .replace(/\*\*/g, '') // Remove bold syntax
-      .replace(/##/g, '')   // Remove heading syntax
-      .replace(/\n\n/g, '\n'); // Clean up double line breaks
-  };
-
   return (
     <div className="w-full space-y-6 mt-8 result-appear">
       {/* Main personality card - shown in analyze view */}
@@ -55,7 +47,17 @@ const PersonalityResult: React.FC<PersonalityResultProps> = ({
               ))}
             </div>
             
-            {/* Removed Potential Careers section from analyze view */}
+            <h3 className="text-lg font-medium mb-3">Potential Careers</h3>
+            <div className="flex flex-wrap gap-2 mb-6">
+              {personality.careers.map((career) => (
+                <span
+                  key={career}
+                  className="px-3 py-1 bg-primary/10 text-primary-foreground rounded-full text-sm"
+                >
+                  {career}
+                </span>
+              ))}
+            </div>
             
             <h3 className="text-lg font-medium mb-2">Optimal Work Environment</h3>
             <p>{personality.workStyle}</p>
@@ -92,40 +94,19 @@ const PersonalityResult: React.FC<PersonalityResultProps> = ({
 
       {/* Career analysis (LLM output) - shown in discover view */}
       {activeView === 'discover' && (
-        <>
-          <Card className="mb-6">
-            <CardHeader>
-              <CardTitle className="text-xl">Recommended Career Paths</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <h3 className="text-lg font-medium mb-3">Potential Careers</h3>
-              <div className="flex flex-wrap gap-2 mb-6">
-                {personality.careers.map((career) => (
-                  <span
-                    key={career}
-                    className="px-3 py-1 bg-primary/10 text-primary-foreground rounded-full text-sm"
-                  >
-                    {career}
-                  </span>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">AI-Powered Career Insight</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose prose-sm max-w-none">
-                <p className="mb-4 text-sm text-muted-foreground">
-                  Powered by advanced Mistral AI Large Language Model analysis
-                </p>
-                <div className="whitespace-pre-line">{cleanLlmOutput(careerAnalysis)}</div>
-              </div>
-            </CardContent>
-          </Card>
-        </>
+        <Card>
+          <CardHeader>
+            <CardTitle className="text-xl">AI-Powered Career Insight</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="prose prose-sm max-w-none">
+              <p className="mb-4 text-sm text-muted-foreground">
+                Powered by advanced Mistral AI Large Language Model analysis
+              </p>
+              <div className="whitespace-pre-line">{careerAnalysis}</div>
+            </div>
+          </CardContent>
+        </Card>
       )}
     </div>
   );
