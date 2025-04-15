@@ -1,4 +1,3 @@
-
 import React, { useState, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -107,7 +106,7 @@ const Index = () => {
         <div className="container max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center mb-4 md:mb-0">
             <Brain className="w-8 h-8 mr-3" />
-            <h1 className="text-2xl md:text-3xl font-bold">Handwriting Personality Analyzer</h1>
+            <h1 className="text-2xl md:text-3xl font-bold">Handwriting Based Personality Analyzer and Career Counselor</h1>
           </div>
           <div className="flex items-center text-sm opacity-80">
             <PenTool className="w-4 h-4 mr-2" />
@@ -122,7 +121,7 @@ const Index = () => {
           {/* Introduction */}
           <Card className="bg-white shadow-sm">
             <CardContent className="pt-6">
-              <h2 className="text-2xl font-semibold mb-4">Discover Your Personality Profile</h2>
+              <h2 className="text-2xl font-semibold mb-4">Discover Your Personality Profile and Career Insights</h2>
               <p className="text-muted-foreground mb-4">
                 Upload a sample of your handwriting to uncover insights about your personality
                 traits and receive personalized career guidance based on your unique characteristics.
@@ -210,7 +209,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="bg-navy-900 text-white/80 py-6 px-4">
         <div className="container max-w-5xl mx-auto text-center text-sm">
-          <p>Handwriting Personality Analyzer</p>
+          <p>Handwriting Based Personality Analyzer and Career Counselor</p>
         </div>
       </footer>
     </div>
